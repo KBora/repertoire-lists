@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "pg": "^8.0.3",
     "sequelize": "^5.21.7"
   },
@@ -13,6 +14,10 @@
     "@babel/node": "^7.8.7",
     "@babel/preset-env": "^7.9.6",
     "nodemon": "^2.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/KBora/repertoire-lists.git"
   },
   "scripts": {
     "start": "nodemon --exec babel-node src/index.js",
