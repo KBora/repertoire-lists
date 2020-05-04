@@ -9,3 +9,9 @@ Node does not have latest ECMAScript features. Babel transpiles code into vanial
 
 Why do we need Environment Variables?
 Store sensitive data (passwords, credentials). Use dotenv to access .env files
+
+What's front end and a backend application?
+Front end sits on the client machine. Backend sits on the server
+
+How do front end and back end communicate?
+Via http requests
