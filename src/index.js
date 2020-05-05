@@ -34,13 +34,22 @@ let users = {
 
 const app = express();
 
-// this are express middleware features 
+// this are express middleware functions 
 app.use(cors()); // allow CORS
 
 // These statements tell express to extract the entire body portion of an 
 // incoming request stream and makes it accessible on req.body.
 app.use(express.json()); // transforms body types from request object - json 
 app.use(express.urlencoded({ extended: true }));// transforms body types from request object - urlencoded
+
+
+// custom middleware function
+// A middleware is just a JavaScript function which has access to three arguments: req, res, next.
+
+app.use((req, res, next) => {
+    req.me = users[1];
+    next();
+})
 
 app.get('/users', (req, res) => {
     return res.send(Object.values(users));
@@ -63,6 +72,7 @@ app.post('/messages', (req, res) => {
     const message = {
       id,
       text: req.body.text,
+      userId: req.me.id,
     };
    
     // const date = Date.parse(req.body.date);
