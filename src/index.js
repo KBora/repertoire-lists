@@ -34,9 +34,10 @@ let users = {
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// this are express middleware features 
+app.use(cors()); // allow CORS
+app.use(express.json()); // transforms body types from request object - json
+app.use(express.urlencoded({ extended: true }));// transforms body types from request object - urlencoded
 
 app.get('/users', (req, res) => {
     return res.send(Object.values(users));
