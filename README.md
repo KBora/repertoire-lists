@@ -15,3 +15,5 @@ Front end sits on the client machine. Backend sits on the server
 
 How do front end and back end communicate?
 Via http requests
+
+This syntax : users[req.params.userId] is NOT retrieving users by array index, but by userId
