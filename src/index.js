@@ -36,7 +36,10 @@ const app = express();
 
 // this are express middleware features 
 app.use(cors()); // allow CORS
-app.use(express.json()); // transforms body types from request object - json
+
+// These statements tell express to extract the entire body portion of an 
+// incoming request stream and makes it accessible on req.body.
+app.use(express.json()); // transforms body types from request object - json 
 app.use(express.urlencoded({ extended: true }));// transforms body types from request object - urlencoded
 
 app.get('/users', (req, res) => {
