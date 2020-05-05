@@ -10,11 +10,19 @@ const app = express();
 app.use(cors());
 
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    return res.send('Received a GET HTTP method');
   });
-
-app.get('/example', (req, res) => {
-    res.send('Hello example!');
+   
+  app.post('/', (req, res) => {
+    return res.send('Received a POST HTTP method');
+  });
+   
+  app.put('/', (req, res) => {
+    return res.send('Received a PUT HTTP method');
+  });
+   
+  app.delete('/', (req, res) => {
+    return res.send('Received a DELETE HTTP method');
   });
 
 app.listen(process.env.PORT, () =>
