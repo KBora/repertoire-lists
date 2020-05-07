@@ -17,3 +17,8 @@ How do front end and back end communicate?
 Via http requests
 
 This syntax : users[req.params.userId] is NOT retrieving users by array index, but by userId
+
+
+How to determine which node process to attach to?
+lsof -i:3000
+

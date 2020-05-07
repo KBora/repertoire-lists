@@ -53,7 +53,7 @@ app.use((req, res, next) => {
 
 app.get('/users', (req, res) => {
     return res.send(Object.values(users));
-  });
+});
    
 app.get('/users/:userId', (req, res) => {
     return res.send(users[req.params.userId]);
@@ -81,8 +81,64 @@ app.post('/messages', (req, res) => {
     messages[id] = message;
    
     return res.send(message);
-  });
+});
 
+app.delete('/messages/:messageId', (req, res) => {
+    // object destructuring using new variable names
+    // and the rest/spread operator
+
+    // in this case, it assigns the [req.params.messageId] property of 'messages'
+    // to new variable of 'message'
+    // remaning objects in 'messages' are assigned to the variable 'otherMessages'
+    // (if [req.params.messageId] does not exist in messages, then 'message' will be undefined
+    // and otherMessages will be the same as message
+    const {
+      [req.params.messageId]: message,
+      ...otherMessages
+    } = messages;
+   
+    // messages now points to otherMessages, effectively
+    // deleting message
+    messages = otherMessages;
+   
+    return res.send(message);
+});
+
+
+app.put('/puttest', (req, res) => {
+    return res.send(req.body);
+});
+
+app.put('/messages/:messageId', (req, res) => {
+
+    let updatedMessage = {};
+    // if user is allowed, update message (req.me is set my custom middleware function above)
+
+    const messageId = req.params.messageId;
+    // update message
+    if (messageId && messages.hasOwnProperty(messageId)) {
+        if (req.me.id === messages[messageId].userId) {
+        updatedMessage = {
+            id: req.params.messageId,
+            text: req.body.text,
+            userId: req.me.id,
+        }        
+        const updatedMessages = {
+            ...messages,
+            [req.params.messageId]: updatedMessage
+        }            
+        messages = updatedMessages;
+        }
+    }
+
+   
+    return res.send(updatedMessage);
+});
+
+app.get('/session', (req, res) => {
+    return res.send(users[req.me.id]);
+  });
+  
 app.listen(process.env.PORT, () =>
   console.log(`Example app listening on port ${process.env.PORT}!`),
 );
