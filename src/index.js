@@ -3,34 +3,7 @@ import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
-
-let users = {
-    1: {
-      id: '1',
-      username: 'Robin Wieruch',
-    },
-    2: {
-      id: '2',
-      username: 'Dave Davids',
-    },
-    18: {
-        id: '33',
-        username: 'Robin Hood',
-      },
-  };
-   
-  let messages = {
-    1: {
-      id: '1',
-      text: 'Hello World',
-      userId: '1',
-    },
-    2: {
-      id: '2',
-      text: 'By World',
-      userId: '2',
-    },
-  };
+import models from './models';
 
 const app = express();
 
@@ -47,24 +20,33 @@ app.use(express.urlencoded({ extended: true }));// transforms body types from re
 // A middleware is just a JavaScript function which has access to three arguments: req, res, next.
 
 app.use((req, res, next) => {
-    req.me = users[1];
+    req.context = {
+        models,
+        me: models.users[1],
+    }
     next();
 })
 
+
+app.get('/session', (req, res) => {
+    return res.send(req.context.models.users[req.context.me.id]);
+  });
+  
+
 app.get('/users', (req, res) => {
-    return res.send(Object.values(users));
+    return res.send(Object.values(req.context.models.users));
 });
    
 app.get('/users/:userId', (req, res) => {
-    return res.send(users[req.params.userId]);
+    return res.send(req.context.models.users[req.params.userId]);
 });
 
 app.get('/messages', (req, res) => {
-    return res.send(Object.values(messages));
+    return res.send(Object.values(req.context.models.messages));
 })
 
 app.get('/messages/:messageId', (req, res) => {
-    return res.send(messages[req.params.messageId]);
+    return res.send(req.context.models.messages[req.params.messageId]);
 })
 
 app.post('/messages', (req, res) => {
@@ -72,13 +54,13 @@ app.post('/messages', (req, res) => {
     const message = {
       id,
       text: req.body.text,
-      userId: req.me.id,
+      userId: req.context.me.id,
     };
    
     // const date = Date.parse(req.body.date);
     // const count = Number(req.body.count);
     
-    messages[id] = message;
+    req.context.models.messages[id] = message;
    
     return res.send(message);
 });
@@ -95,19 +77,15 @@ app.delete('/messages/:messageId', (req, res) => {
     const {
       [req.params.messageId]: message,
       ...otherMessages
-    } = messages;
+    } = req.context.models.messages;
    
     // messages now points to otherMessages, effectively
     // deleting message
-    messages = otherMessages;
+    req.context.models.messages = otherMessages;
    
     return res.send(message);
 });
 
-
-app.put('/puttest', (req, res) => {
-    return res.send(req.body);
-});
 
 app.put('/messages/:messageId', (req, res) => {
 
@@ -116,18 +94,18 @@ app.put('/messages/:messageId', (req, res) => {
 
     const messageId = req.params.messageId;
     // update message
-    if (messageId && messages.hasOwnProperty(messageId)) {
-        if (req.me.id === messages[messageId].userId) {
+    if (messageId && req.context.models.messages.hasOwnProperty(messageId)) {
+        if (req.context.me.id === req.context.models.messages[messageId].userId) {
         updatedMessage = {
             id: req.params.messageId,
             text: req.body.text,
-            userId: req.me.id,
+            userId: req.context.me.id,
         }        
         const updatedMessages = {
-            ...messages,
+            ...req.context.models.messages,
             [req.params.messageId]: updatedMessage
         }            
-        messages = updatedMessages;
+        req.context.models.messages = updatedMessages;
         }
     }
 
@@ -135,10 +113,6 @@ app.put('/messages/:messageId', (req, res) => {
     return res.send(updatedMessage);
 });
 
-app.get('/session', (req, res) => {
-    return res.send(users[req.me.id]);
-  });
-  
 app.listen(process.env.PORT, () =>
   console.log(`Example app listening on port ${process.env.PORT}!`),
 );
