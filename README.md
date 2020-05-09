@@ -22,3 +22,13 @@ This syntax : users[req.params.userId] is NOT retrieving users by array index, b
 How to determine which node process to attach to?
 lsof -i:3000
 
+PostGres
+https://www.robinwieruch.de/postgres-sql-macos-setup
+
+Database: repb
+
+list dbs: psql -l
+
+database: repb
+superuser: baba
+password: kiki
