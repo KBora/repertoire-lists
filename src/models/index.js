@@ -1,5 +1,8 @@
 import Sequelize from 'sequelize';
- 
+import user from './user';
+import message from './message';
+
+
 const sequelize = new Sequelize(
   process.env.DATABASE,
   process.env.DATABASE_USER,
@@ -10,8 +13,8 @@ const sequelize = new Sequelize(
 );
  
 const models = {
-  User: sequelize.import('./user'),
-  Message: sequelize.import('./message'),
+    User: sequelize.import('./user'),
+    Message: sequelize.import('./message'),
 };
  
 Object.keys(models).forEach(key => {
