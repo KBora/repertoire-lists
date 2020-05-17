@@ -1,6 +1,7 @@
 import Sequelize from 'sequelize';
 import user from './user';
 import message from './message';
+import piece from './piece';
 
 
 const sequelize = new Sequelize(
@@ -15,6 +16,7 @@ const sequelize = new Sequelize(
 const models = {
     User: sequelize.import('./user'),
     Message: sequelize.import('./message'),
+    Piece: sequelize.import('./piece')
 };
  
 Object.keys(models).forEach(key => {

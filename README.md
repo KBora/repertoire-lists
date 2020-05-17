@@ -32,3 +32,13 @@ list dbs: psql -l
 database: repb
 superuser: baba
 password: kiki
+
+How to run this thing
+yarn run start
+
+How to start postgres on local machine
+pg_ctl -D /usr/local/var/postgres start
+
+How to stop postgres
+pg_ctl -D /usr/local/var/postgres stop
+https://www.robinwieruch.de/postgres-sql-macos-setup

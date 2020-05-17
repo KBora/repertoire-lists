@@ -33,7 +33,7 @@ app.use(async (req, res, next) => {
 app.use('/session', routes.session);
 app.use('/users', routes.user);
 app.use('/messages', routes.message);
-
+app.use('/pieces', routes.piece);
 
 // * Start * //
 const eraseDatabaseOnSync = true;
@@ -41,6 +41,7 @@ const eraseDatabaseOnSync = true;
 sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
     if (eraseDatabaseOnSync) {
         createUsersWithMessages();
+        createPieces();
       }
 
     app.listen(process.env.PORT, () => {
@@ -48,6 +49,17 @@ sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
     });
 });
 
+
+const createPieces = async () => {
+    await models.Piece.create(
+        {
+            title: 'Prelude and Fugue No. 3 in C sharp BWV 848',
+            subtitle: 'Well-Tempered Clavier Book 1',
+            composer: 'J.S. Bach',
+            duration: 300
+        }
+    )
+}
 const createUsersWithMessages = async () => {
     await models.User.create(
       {
@@ -79,4 +91,5 @@ const createUsersWithMessages = async () => {
           include: [models.Message],
         },
       );
+
   };
